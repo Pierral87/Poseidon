@@ -14,6 +14,16 @@ class UserController extends Controller
     {
         // $users = User::all();
         $users = User::with('role')->get();
+
+        $user = User::first();
+        $user->name = "Boby";
+        // $user->save();
+        // dump($user);
+        dump($user->isDirty());
+        $user->save();
+
+        dump($user->wasChanged());
+        dd($user->isClean());
         // $user = User::find(1);
         // $users->load('role');
         // dd($user->role);

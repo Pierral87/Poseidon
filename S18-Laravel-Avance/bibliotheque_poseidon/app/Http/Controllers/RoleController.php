@@ -20,6 +20,7 @@ class RoleController extends Controller
      */
     public function create()
     {
+        // dd(Role::find(1)->name);
         return view('roles.create');
     }
 
