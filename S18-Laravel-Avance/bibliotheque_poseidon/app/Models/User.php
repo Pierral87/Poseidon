@@ -34,4 +34,20 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
+
+    public function books()
+    {
+        return $this->belongsToMany(Book::class, 'loans')
+                ->using(Loan::class)
+                ->withPivot(
+                    'borrowed_at',
+                    'returned_at',
+                )
+                ->withTimestamps();
+    }
 }

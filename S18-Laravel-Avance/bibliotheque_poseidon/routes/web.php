@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -62,4 +63,19 @@ Route::get('/admin', function(){
 Route::middleware(["admin", "auth"])->group(function(){
 Route::resource('authors', AuthorController::class);
 Route::resource('books', BookController::class);
+});
+
+Route::get('/loan-add', function(){
+    $user = User::find(1);
+    // $user->books()->attach(
+    //     3,
+    //     [
+    //         "borrowed_at" => now()
+    //     ]
+    // );
+    // $user->books()->detach(3);
+    $user->books()->sync([   
+        2,5,8
+    ]);
+    return "Emprunt ajouté !";
 });

@@ -173,3 +173,6 @@ Oublier d'appeler return $next($request) lorsqu'on souhaite laisser passer la re
 Placer les vérifications d'authentification directement dans les contrôleurs au lieu d'utiliser le middleware auth.
 Utiliser un middleware pour gérer des autorisations très spécifiques alors qu'une Gate ou une Policy serait plus adaptée.
 Croire qu'un middleware sert uniquement à l'authentification : il peut être utilisé pour de nombreux autres traitements.
+
+
+*/
