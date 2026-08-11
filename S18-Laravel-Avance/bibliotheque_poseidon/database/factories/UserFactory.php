@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Auth\MustVerifyEmail as AuthMustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -11,12 +13,14 @@ use Illuminate\Support\Str;
 /**
  * @extends Factory<User>
  */
-class UserFactory extends Factory
+class UserFactory extends Factory implements MustVerifyEmail
 {
     /**
      * The current password being used by the factory.
      */
     protected static ?string $password;
+
+    use AuthMustVerifyEmail;
 
     /**
      * Define the model's default state.

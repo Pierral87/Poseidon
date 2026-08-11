@@ -57,7 +57,7 @@ class RoleController extends Controller
         //     'name' => $validated['name']
         // ]);
         Role::create($validated);
-        return redirect()->route('roles.create');
+        return redirect()->route('roles.create')->with('success', 'Le rôle a été créé avec succès');
     }
 
     /**
