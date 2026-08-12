@@ -29,13 +29,16 @@
                                 {{ $book->author->last_name ?? 'Auteur inconnu' }}
                             </td>
                             <td class="text-end">
+                            @can('update', $book)
                                 <a href="{{ route('books.edit', $book) }}" class="btn btn-sm btn-outline-warning">Éditer</a>
-                                
+                            @endcan  
+                                @can('manage-books')
                                 <form action="{{ route('books.destroy', $book) }}" method="POST" class="d-inline" onsubmit="return confirm('Confirmer la suppression de ce livre ?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
                                 </form>
+                                @endcan
                             </td>
                         </tr>
                     @empty

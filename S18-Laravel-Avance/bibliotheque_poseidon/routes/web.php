@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -60,7 +62,7 @@ Route::get('/admin', function(){
     return "Ici c'est la Zone Admin!!!";
 })->middleware('admin');
 
-Route::middleware(["admin", "auth"])->group(function(){
+Route::middleware(["auth"])->group(function(){
 Route::resource('authors', AuthorController::class);
 Route::resource('books', BookController::class);
 });
@@ -78,4 +80,35 @@ Route::get('/loan-add', function(){
         2,5,8
     ]);
     return "Emprunt ajouté !";
+});
+
+Route::middleware(["auth", "is_staff"])->group(function() {
+    Route::resource('loans', LoanController::class)->except(["show", "edit", "destroy"]);
+    Route::patch("loans/{loan}/return", [LoanController::class, 'markAsReturned'])->name('loans.return');
+});
+
+Route::get('/gate-test', function() {
+
+    // if (Gate::allows('manage-books')) {
+    //     return "Autorisé";
+    // } 
+    // return "Refusé";
+    if (Gate::denies('manage-books')) {
+        abort(403, "Tu peux pas, y a la Gate");
+    }
+});
+
+Route::get('/give-role', function(){
+    $user = User::find(12);
+    $user->assignRole('admin');
+});
+
+Route::get('/test-role', function() {
+    $user = User::find(12);
+    if ($user->hasRole('admin')) {
+        // return "Oui l'user 12 est admin !";
+    }
+    if($user->can('delete books')) {
+        return "Oui ce user 12 peut delete les books!";
+    }
 });

@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookRequest;
 use App\Models\Author;
 use App\Models\Book;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class BookController extends Controller
 {
+
+    use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
@@ -30,12 +36,14 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BookRequest $request)
     {
-         $validated = $request->validate([
-            'title'     => 'required|string|min:3|max:255',
-            'author_id' => 'required|exists:authors,id',
-        ]);
+        //  $validated = $request->validate([
+        //     'title'     => 'required|string|min:3|max:255',
+        //     'author_id' => 'required|exists:authors,id',
+        // ]);
+
+        $validated = $request->validated();
 
         Book::create($validated);
 
@@ -57,6 +65,9 @@ class BookController extends Controller
      */
     public function edit(Book $book)
     {
+        // $this->authorize('update', $book);
+        Gate::authorize('update', $book);
+
          $authors = Author::orderBy('last_name')->get();
 
         return view('books.edit', compact('book', 'authors'));
@@ -65,12 +76,14 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Book $book)
+    public function update(BookRequest $request, Book $book)
     {
-         $validated = $request->validate([
-            'title'     => 'required|string|min:3|max:255',
-            'author_id' => 'required|exists:authors,id',
-        ]);
+        //  $validated = $request->validate([
+        //     'title'     => 'required|string|min:3|max:255',
+        //     'author_id' => 'required|exists:authors,id',
+        // ]);
+
+        $validated = $request->validated();
 
         $book->update($validated);
 
@@ -82,6 +95,13 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
+
+        // if (Gate::denies('manage-books')) {
+        //     abort(403);
+        // }
+
+        Gate::authorize('delete', $book);
+
          $book->delete();
 
         return redirect()->route('books.index');

@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             AuthorSeeder::class,
             BookSeeder::class,
+            LoanSeeder::class,
             ]);
         
         User::factory(10)->create();

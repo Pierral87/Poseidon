@@ -34,13 +34,16 @@
                                 </span>
                             </td>
                             <td class="text-end">
+                            @role('admin')
                                 <a href="{{ route('authors.edit', $author) }}" class="btn btn-sm btn-outline-warning">Éditer</a>
-
+                            @endrole
+                            @can('delete books')
                                 <form action="{{ route('authors.destroy', $author) }}" method="POST" class="d-inline" onsubmit="return confirm('Confirmer la suppression de cet auteur ?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
                                 </form>
+                                @endcan
                             </td>
                         </tr>
                     @empty

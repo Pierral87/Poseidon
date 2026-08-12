@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('role_id')->after('id')->nullable()->constrained()->onDelete('cascade');
-        });
+        // Schema::table('users', function (Blueprint $table) {
+        //     $table->foreignId('role_id')->after('id')->nullable()->constrained()->onDelete('cascade');
+        // });
     }
 
     /**
@@ -21,9 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['role_id']);
-            $table->dropColumn('role_id');
-        });
+        // Schema::table('users', function (Blueprint $table) {
+        //     $table->dropForeign(['role_id']);
+        //     $table->dropColumn('role_id');
+        // });
     }
 };

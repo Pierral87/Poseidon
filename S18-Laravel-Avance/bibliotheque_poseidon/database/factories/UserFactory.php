@@ -30,7 +30,7 @@ class UserFactory extends Factory implements MustVerifyEmail
     public function definition(): array
     {
         return [
-            'role_id' => Role::inRandomOrder()->first()->id,
+            // 'role_id' => Role::inRandomOrder()->first()->id,
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
