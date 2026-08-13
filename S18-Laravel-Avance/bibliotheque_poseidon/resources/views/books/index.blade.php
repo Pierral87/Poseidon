@@ -32,7 +32,7 @@
                             @can('update', $book)
                                 <a href="{{ route('books.edit', $book) }}" class="btn btn-sm btn-outline-warning">Éditer</a>
                             @endcan  
-                                @can('manage-books')
+                                @can('delete', $book)
                                 <form action="{{ route('books.destroy', $book) }}" method="POST" class="d-inline" onsubmit="return confirm('Confirmer la suppression de ce livre ?')">
                                     @csrf
                                     @method('DELETE')
@@ -50,7 +50,8 @@
                     @endforelse
                 </tbody>
             </table>
+           
         </div>
     </div>
-
+ {{$books->links()}}
 </div>

@@ -15,20 +15,20 @@ class EnsureUserIsStaff
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = $request->user();
+        // $user = $request->user();
 
         // Vérification si l'utilisateur est connecté 
-        if (!$user) {
-            abort(403, "Vous devez être connecté (Middleware EnsureUserIsStaff)");
-        }
+        // if (!$user) {
+        //     abort(403, "Vous devez être connecté (Middleware EnsureUserIsStaff)");
+        // }
 
-        // Récupération du nom du role 
-        $roleName = $user->role?->name;
+        // // Récupération du nom du role 
+        // $roleName = $user->role?->name;
 
-        // Vérification si le role fait partie des accès
-        if (!in_array($roleName, ['admin', 'staff'], true)) {
-            abort(403, 'Accès non autorisé (Middleware EnsureUserIsStaff)');
-        }
+        // // Vérification si le role fait partie des accès
+        // if (!in_array($roleName, ['admin', 'staff'], true)) {
+        //     abort(403, 'Accès non autorisé (Middleware EnsureUserIsStaff)');
+        // }
 
         return $next($request);
     }

@@ -8,12 +8,23 @@ use Illuminate\Auth\Access\Response;
 
 class BookPolicy
 {
+
+// Methode before, s'execute avant toutes les autres méthodes, pour permettre de donner tous les droits à notre admin
+    public function before(User $user, string $ability)
+    {
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+
+        return null;
+    }
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +32,7 @@ class BookPolicy
      */
     public function view(User $user, Book $book): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +40,7 @@ class BookPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->hasRole('staff');
     }
 
     /**
@@ -38,7 +49,7 @@ class BookPolicy
     public function update(User $user, Book $book): bool
     {
         // return $user->role->name === "admin";
-        return true;
+        return $user->hasRole('staff');
     }
 
     /**
@@ -47,7 +58,7 @@ class BookPolicy
     public function delete(User $user, Book $book): bool
     {
         // return $user->role->name === "admin";
-        return true;
+        return $user->hasAnyRole('staff') && $book->created_by === $user->id;
     }
 
     /**

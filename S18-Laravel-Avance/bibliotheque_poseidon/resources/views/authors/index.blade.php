@@ -37,7 +37,7 @@
                             @role('admin')
                                 <a href="{{ route('authors.edit', $author) }}" class="btn btn-sm btn-outline-warning">Éditer</a>
                             @endrole
-                            @can('delete books')
+                            @can('delete', $author)
                                 <form action="{{ route('authors.destroy', $author) }}" method="POST" class="d-inline" onsubmit="return confirm('Confirmer la suppression de cet auteur ?')">
                                     @csrf
                                     @method('DELETE')

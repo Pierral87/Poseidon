@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AuthorRequest;
 use App\Models\Author;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class AuthorController extends Controller
@@ -29,14 +31,16 @@ class AuthorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AuthorRequest $request)
     {
-        $validated = $request->validate([
-            'last_name'  => 'required|string|max:100',
-            'first_name' => 'required|string|max:100',
-            'email'      => 'required|email|max:255|unique:authors,email',
-            'phone'      => 'nullable|string|max:20',
-        ]);
+        // $validated = $request->validate([
+        //     'last_name'  => 'required|string|max:100',
+        //     'first_name' => 'required|string|max:100',
+        //     'email'      => 'required|email|max:255|unique:authors,email',
+        //     'phone'      => 'nullable|string|max:20',
+        // ]);
+
+        $validated = $request->validated();
 
          Author::create($validated);
 
@@ -84,6 +88,7 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
+        Gate::authorize('delete', $author);
         $author->delete();
 
         return redirect()->route('authors.index');

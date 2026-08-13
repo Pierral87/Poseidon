@@ -7,6 +7,7 @@ use App\Models\Author;
 use App\Models\Book;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class BookController extends Controller
@@ -19,7 +20,14 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::with('author')->latest()->get();
+        // $id = 22;
+        // Book::withTrashed()->find($id)->restore();
+        // $book = Book::find(22);
+        // $book->forceDelete();
+
+        // $books = Book::with('author')->latest()->get();
+        $books = Book::paginate(5);
+        $books->load("author");
            return view('books.index', compact('books'));
     }
 
@@ -28,6 +36,8 @@ class BookController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+        $user->can('create books');
         $authors = Author::orderBy('last_name')->get();
 
         return view('books.create', compact('authors'));
@@ -43,7 +53,12 @@ class BookController extends Controller
         //     'author_id' => 'required|exists:authors,id',
         // ]);
 
+        $user = Auth::user();
+        $user->can('create books');
         $validated = $request->validated();
+
+        // On rajoute l'id du createur
+        $validated["created_by"] = Auth::id();
 
         Book::create($validated);
 
@@ -82,6 +97,8 @@ class BookController extends Controller
         //     'title'     => 'required|string|min:3|max:255',
         //     'author_id' => 'required|exists:authors,id',
         // ]);
+
+         Gate::authorize('update', $book);
 
         $validated = $request->validated();
 
